@@ -151,3 +151,13 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+# AI Configuration
+# ============================================
+GROQ_API_KEY = config('GROQ_API_KEY', default='')
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
+
+GROQ_MODEL = config('GROQ_MODEL', default='llama-3.3-70b-versatile')
+GEMINI_MODEL = config('GEMINI_MODEL', default='gemini-2.0-flash')
+
+AI_BOT_EMAIL = 'ai@studysaathi.com'
+AI_BOT_NAME = 'StudySaathi AI'

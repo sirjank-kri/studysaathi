@@ -14,6 +14,7 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import { useQuestions } from '../context/QuestionsContext';
 import toast from 'react-hot-toast';
+import AIAnswerSection from '../components/AIAnswerSection';
 
 const QuestionDetailPage = () => {
   const { id } = useParams();
@@ -179,6 +180,8 @@ const QuestionDetailPage = () => {
   }
 
   const answers = question.answers || [];
+  const aiAnswer = answers.find(a => a.is_ai_generated) || null;
+  const humanAnswers = answers.filter(a => !a.is_ai_generated);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -266,17 +269,25 @@ const QuestionDetailPage = () => {
         </div>
       </div>
 
+{/* ── AI Answer Section ── */}
+      <AIAnswerSection
+        questionId={question.id}
+        existingAiAnswer={aiAnswer}
+      />
+
       {/* Answers Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <MessageSquare size={22} /> {answers.length} Answer{answers.length !== 1 ? 's' : ''}
+          <MessageSquare size={22} />
+          {humanAnswers.length} Answer{humanAnswers.length !== 1 ? 's' : ''}
         </h2>
       </div>
 
+
       {/* Answers List */}
-      {answers.length > 0 ? (
+      {humanAnswers.length > 0 ? (
         <div className="space-y-4 mb-8">
-          {answers.map((answer) => (
+          {humanAnswers.map((answer) => (
             <div key={answer.id} className={`card ${answer.is_accepted ? 'border-green-500/30 bg-green-500/5' : ''}`}>
               <div className="flex gap-4">
                 {/* Vote Column */}

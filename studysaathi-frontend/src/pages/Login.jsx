@@ -4,15 +4,6 @@ import { GraduationCap, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
-const GoogleIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24">
-    <path fill="#EA4335" d="M5.27 9.76A7.08 7.08 0 0 1 12 4.91c1.69 0 3.22.59 4.42 1.58l3.29-3.29A11.95 11.95 0 0 0 12 0C7.27 0 3.2 2.7 1.24 6.65l4.03 3.11Z"/>
-    <path fill="#34A853" d="M16.04 18.01A7.06 7.06 0 0 1 12 19.09 7.08 7.08 0 0 1 5.28 14.27L1.24 17.33A11.95 11.95 0 0 0 12 24c2.93 0 5.73-.96 7.83-2.99l-3.79-2.99Z"/>
-    <path fill="#4A90E2" d="M19.83 21.01A11.94 11.94 0 0 0 23.45 12c0-.71-.08-1.47-.18-2.18H12v4.64h6.44a5.9 5.9 0 0 1-2.4 3.56l3.79 2.99Z"/>
-    <path fill="#FBBC05" d="M5.28 14.27a7.12 7.12 0 0 1 0-4.51L1.24 6.65A11.94 11.94 0 0 0 0 12c0 1.92.44 3.73 1.24 5.33l4.04-3.06Z"/>
-  </svg>
-);
-
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -37,98 +28,145 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-
     setLoading(true);
     try {
       await login(formData.email, formData.password);
       toast.success('Welcome back!');
       navigate('/dashboard');
     } catch (error) {
-      toast.error('Login failed. Please try again.');
+      const msg =
+        error.response?.data?.message ||
+        error.response?.data?.detail ||
+        'Invalid email or password.';
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
+    <div className="min-h-[85vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
+
+        {/* Logo + heading */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-purple rounded-xl flex items-center justify-center">
-              <GraduationCap className="text-white" size={28} />
+          <Link to="/" className="inline-flex items-center gap-2.5 mb-7">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-purple rounded-xl flex items-center justify-center">
+              <GraduationCap className="text-white" size={22} />
             </div>
-            <span className="text-2xl font-bold gradient-text">StudySaathi</span>
+            <span className="text-xl font-bold gradient-text">StudySaathi</span>
           </Link>
-          <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
-          <p className="text-dark-400">Sign in to continue learning</p>
+
+          <h1 className="text-2xl font-bold text-white mb-1">Welcome back</h1>
+          <p className="text-dark-400 text-sm">
+            Sign in to continue to your account
+          </p>
         </div>
 
+        {/* Card */}
         <div className="auth-card">
           <form onSubmit={handleSubmit} className="space-y-5">
+
+            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-dark-200 mb-2">Email</label>
+              <label className="block text-sm font-medium text-dark-200 mb-2">
+                Email address
+              </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-400" size={18} />
+                <Mail
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-dark-500"
+                  size={17}
+                />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@example.com"
-                  className={`input-dark pl-11 ${errors.email ? 'border-red-500/50' : ''}`}
+                  className={`input-dark pl-10 ${
+                    errors.email ? 'border-red-500/50 focus:border-red-500/70' : ''
+                  }`}
                 />
               </div>
-              {errors.email && <p className="mt-1.5 text-sm text-red-400">{errors.email}</p>}
+              {errors.email && (
+                <p className="mt-1.5 text-xs text-red-400">{errors.email}</p>
+              )}
             </div>
 
+            {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-dark-200 mb-2">Password</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-dark-200">
+                  Password
+                </label>
+              </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-400" size={18} />
+                <Lock
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-dark-500"
+                  size={17}
+                />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Enter your password"
-                  className={`input-dark pl-11 pr-11 ${errors.password ? 'border-red-500/50' : ''}`}
+                  className={`input-dark pl-10 pr-11 ${
+                    errors.password ? 'border-red-500/50 focus:border-red-500/70' : ''
+                  }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400 hover:text-white"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-dark-500 hover:text-dark-300 transition-colors"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
-              {errors.password && <p className="mt-1.5 text-sm text-red-400">{errors.password}</p>}
+              {errors.password && (
+                <p className="mt-1.5 text-xs text-red-400">{errors.password}</p>
+              )}
             </div>
 
-            <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2 py-3">
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full flex items-center justify-center gap-2 py-3 mt-2"
+            >
               {loading ? (
                 <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
-                <>Sign In <ArrowRight size={18} /></>
+                <>
+                  Sign In <ArrowRight size={17} />
+                </>
               )}
             </button>
           </form>
 
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-white/10"></div>
-            <span className="text-dark-400 text-sm">or</span>
-            <div className="flex-1 h-px bg-white/10"></div>
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-white/8" />
+            <span className="text-dark-500 text-xs font-medium">OR</span>
+            <div className="flex-1 h-px bg-white/8" />
           </div>
 
-          <button className="btn-secondary w-full flex items-center justify-center gap-3">
-            <GoogleIcon />
-            Continue with Google
-          </button>
-
-          <p className="text-center text-dark-400 mt-6">
-            Don't have an account? <Link to="/signup" className="text-primary-400 font-medium">Sign up</Link>
+          {/* Sign up link */}
+          <p className="text-center text-dark-400 text-sm">
+            New to StudySaathi?{' '}
+            <Link
+              to="/signup"
+              className="text-primary-400 font-semibold hover:text-primary-300 transition-colors"
+            >
+              Create an account
+            </Link>
           </p>
         </div>
+
+        {/* Footer note */}
+        <p className="text-center text-dark-600 text-xs mt-6">
+          Built for TU students · Free forever
+        </p>
       </div>
     </div>
   );

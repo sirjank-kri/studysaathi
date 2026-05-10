@@ -4,14 +4,45 @@ from accounts.serializers import UserSerializer
 
 
 class AnswerSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
+    author_name = serializers.SerializerMethodField()
+    author_faculty = serializers.SerializerMethodField()
+    author_initial = serializers.SerializerMethodField()
     upvotes = serializers.ReadOnlyField()
-    
+    is_ai_generated = serializers.ReadOnlyField()
+
     class Meta:
         model = Answer
-        fields = ['id', 'question', 'author', 'content', 'is_accepted', 'is_ai_generated', 'upvotes', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'author', 'created_at', 'updated_at', 'is_ai_generated']
+        fields = [
+            'id',
+            'question',
+            'author',
+            'author_name',
+            'author_faculty',
+            'author_initial',
+            'content',
+            'is_accepted',
+            'is_ai_generated',
+            'upvotes',
+            'created_at',
+            'updated_at',
+        ]
 
+    def get_author_name(self, obj):
+        # AI answers always show AI name
+        if obj.is_ai_generated:
+            return 'StudySaathi AI'
+        return obj.author.full_name
+
+    def get_author_faculty(self, obj):
+        if obj.is_ai_generated:
+            return 'AI Assistant'
+        return obj.author.faculty
+    
+    def get_author_initial(self, obj):
+        if obj.is_ai_generated:
+            return '✦'
+        name = obj.author.full_name or ''
+        return name[0].upper() if name else '?'
 
 class QuestionListSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
