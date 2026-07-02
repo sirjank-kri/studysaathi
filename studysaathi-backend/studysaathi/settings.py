@@ -120,19 +120,13 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
-# Email Configuration (Console for development)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# For production, use:
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
-DEFAULT_FROM_EMAIL = 'StudySaathi <noreply@studysaathi.com>'
-
-# OTP Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')       
+DEFAULT_FROM_EMAIL = 'StudySaathi <fake81email81@gmail.com>'  
 OTP_EXPIRY_MINUTES = 10
 # Session Configuration
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
